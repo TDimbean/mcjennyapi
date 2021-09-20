@@ -1,0 +1,1790 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>McJenny.WebAPI</name>
+    </assembly>
+    <members>
+        <member name="M:McJenny.WebAPI.Controllers.DishesController.GetDishes">
+            <summary>
+            Get All Dishes
+            </summary>
+            <remarks>
+            Get A list of all the Dishes.
+            A Dish has a Name and a DishId.
+            It has Dish Requirements, Many to Many relationships between itself
+            and Supply Categories
+            It has Menu Items, Many to Many relationships between itself 
+            and Menus
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.DishesController.GetDish(System.Int32)">
+            <summary>
+            Get Dish
+            </summary>
+            <remarks>
+            Gets the Dish whose DishId matches the given Id 
+            Contains the Dishe's name and the Supply Categories it requires.
+            If the given Id does not belong to any Dish
+            Not Found is returned instead
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.DishesController.GetDishBasic(System.Int32)">
+            <summary>
+            Get Dish Basic
+            </summary>
+            <remarks>
+            Returns the Dish corresponding to the given Id 
+            Contains the DishId, Name and two empty collections, the Dish Requirements and Menu Items
+            If the specified Id doesn't match any existing Dish,
+            Not Found will be returned instead
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.DishesController.GetLocations(System.Int32)">
+            <summary>
+            Get Dish Locations
+            </summary>
+            <remarks>
+            Returns the Locations where the Dish corresponding to the given Id is available
+            as a list of strings.
+            If no Dish with the specified Id exists,
+            Not Found is returned instead
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.DishesController.GetRequirements(System.Int32)">
+            <summary>
+            Get Dish Requirements
+            </summary>
+            <remarks>
+            Returns the Supply Categories required to prepare the
+            Dish corresponding to the given Id, based on the Dish's
+            Dish Requirement relationships.
+            If no Dish with the specified Id exists,
+            Not Found is returned instead.
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.DishesController.GetMenus(System.Int32)">
+            <summary>
+            Get Dish Menus
+            </summary>
+            <remarks>
+            Returns the Menus which contain the Dish
+            corresponding to the given Id, based on the Dish's
+            Menu Item relationships.
+            If no Dish with the specified Id exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.DishesController.GetDishesQueried(System.String)">
+            <summary>
+            Get Dishes Queried
+            </summary>
+            <remarks>
+            Returns a list of Dishes according to the specified query
+            Query Keywords: Filter, SortBy(Optional: Desc), PgInd and PgSz.
+            Keywords are followed by '=', a string parameter, and, if further keywords
+            are to be added afterwards, the Ampersand Separator
+            Filter: Only return Dishes where the Name
+            contains the given string.
+            SortBy: Dishes will be ordered in ascending order by either their Name,
+            if the string parameter is 'name', or by their ID, if
+            any other string parameter is given.
+            Desc: If SortBy is used, and the string parameter is 'true',
+            Dishes wil be returned in Descending Order.
+            PgInd: If the following int is greater than 0 and the PgSz 
+            keyword is also present, Dishes will be paged and
+            page 'PgInd' of size 'PgSz' will be returned.
+            PgSz: If the following int is greater than 0 and the PgInd 
+            keyword is also present, Dishes will be paged and
+            page 'PgInd' of size 'PgSz' will be returned.
+            Any of the Keywords can be used or ommited.
+            Using a keyword more than once will result in only the first keyword being recognized.
+            If a keyword is followed by an incorrectly formatted parameter, the keyword will be ignored.
+            Order of Query Operations: Filter > Sort > Pagination
+            Any improperly formatted text will be ignored.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.DishesController.UpdateDish(System.Int32,McJenny.WebAPI.Data.Models.Dish)">
+            <summary>
+            Update Dish
+            </summary>
+            <param name="id">The Id of the Dish that must be updated</param>
+            <param name="dish">A Dish object whose properties are to be transfered to the existing Dish</param>
+            <remarks>
+            Updates the values of an existing Dish, whose Id corresponds to the given parameter,
+            using the values from a dish parameter.
+            Only the Name of the Dish may be updated through the API.
+            For its relationships(Dish Requirements and Menu Items) their respective APIs
+            must be used.
+            The Dish Id may not be updated.
+            The given parameter of type Dish must contain a Name, an empty collection
+            of Dish Requirements and one of Menu Items and a Dish Id of 0
+            The Dish Id Parameter must correspond to an existing Dish, otherwise
+            Not Found is returned
+            If the Dish parameter is incorrect, Bad Request is returned
+            Dish parameter errors:
+            (1) The Dish Id is not 0, 
+            (2) The Name string is empty,
+            (3) The Name string is longer than 50 characters,
+            (4) The Name string is the same as another Dish's Name,
+            (5) Dish Requirements or Menu Items are null
+            (6) Dish Requirements or Menu Items are not empty collections
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.DishesController.CreateDish(McJenny.WebAPI.Data.Models.Dish)">
+            <summary>
+            Create Dish
+            </summary>
+            <param name="dish">A Dish object to be added to the Database</param>
+            <remarks>
+            Creates a new Dish and inserts it into the Database
+            using the values from a dish parameter.
+            Only the Name of the Dish may be set.
+            For its relationships(Dish Requirements and Menu Items) their respective APIs
+            must be used.
+            The Dish Id may not be set. The Databse will automatically
+            assign it a new Id, equivalent to the last Dish Id in the Database + 1.
+            The given parameter of type Dish must contain a Name, an empty collection
+            of Dish Requirements and one of Menu Items and a Dish Id of 0
+            If the Dish parameter is incorrect, Bad Request is returned
+            Dish parameter errors:
+            (1) The Dish Id is not 0, 
+            (2) The Name string is empty,
+            (3) The Name string is longer than 50 characters,
+            (4) The Name string is the same as another Dish's Name,
+            (5) Dish Requirements or Menu Items are null,
+            (6) Dish Requirements or Menu Items are not empty collections.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.DishesController.DeleteDish(System.Int32)">
+            <summary>
+            Delete Dish
+            </summary>
+            <param name="id">Id of Dish set for Deletion</param>
+            <remarks>
+            Removes a Dish from the Database.
+            If there is no Dish, whose Id matches the given Id parameter, 
+            Not Found is returned
+            If the desired Dish is the last in the Database, and it has no
+            Menu Item or Dish Requirement relationships, it is removed from the Database
+            and its Dish Id will be used by the next Dish to be inserted.
+            If the desired Dish is not the last in the Database, and it has no
+            Menu Item or Dish Requirement relationships, it is swapped with the last
+            Dish in the Database before it is removed, giving the last Dish in the Database
+            the Id of the deleted Dish and freeing up the last Dish's Id for
+            the next Dish to be inserted.
+            If the desired Dish has any Menu Item or Dish Requirement relationships,
+            it is turned into a blank Dish, so a not to violate its relationships.
+            Its Name will be changed to reflect that fact.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.DishRequirementsController.GetDishRequirements">
+            <summary>
+            Get Dish Requirements
+            </summary>
+            <remarks>
+            Returns a collection of strings explaining the Dish Requirement relationships
+            between Dishes and the Supply Categories required for their preparation.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.DishRequirementsController.GetDishRequirement(System.Int32)">
+            <summary>
+            Get Dish Requirement
+            </summary>
+            <param name="id">Id of target Dish Requirement</param>
+            <remarks>
+            Returns a string explaining the Dish Requirement relationship 
+            between a Dish and Supply Category whose IDs match those of
+            the Dish Requirement.
+            If no Dish Requirement matches the given 'id' parameter,
+            Not Found is returned.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.DishRequirementsController.GetDishRequirementBasic(System.Int32)">
+            <summary>
+            Get Dish Requirement Basic
+            </summary>
+            <param name="id">Id of target Dish Requirement</param>
+            <remarks>
+            Returns a Dish Requirement Object whose Dish Requirement Id
+            matches the given 'id' parameter.
+            If no such Dish Requirement exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.DishRequirementsController.CreateDishRequirement(McJenny.WebAPI.Data.Models.DishRequirement)">
+            <summary>
+            Create Dish Requirement
+            </summary>
+            <param name="dishRequirement">Dish Requirement to Create</param>
+            <remarks>
+            Creates a new Dish Requirement and inserts it into the Database
+            using the values from the provided 'dishRequirement' parameter.
+            Only the Dish Id and Supply Category Id of the Dish Requirement may be set.
+            Its Dish and Supply Category will be automatically set based on the
+            Dish Id and Supply Category Id.
+            The Dish Requirement Id may not be set. The Databse will automatically
+            assign it a new Id, equivalent to the last Dish Requirement Id in the Database + 1.
+            The given parameter of type Dish Requirement must contain a Dish Id and
+            Supply Category Id, belonging to a valid Dish and Supply Category.
+            If the 'dishRequirement' parameter is incorrect, Bad Request is returned.
+            Dish Requirement parameter errors:
+            (1) The Dish Requirement Id is not 0, 
+            (2) The Dish Id does not match any Dish's Dish Id,
+            (3) The Supply Category Id does not match any Supply Category's 
+            Supply Category Id,
+            (4) Another Dish Requirement with the same Dish Id and Supply Category Id values
+            already exists,
+            (5) Dish or Supply Category are not null.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.DishRequirementsController.DeleteDishRequirement(System.Int32)">
+            <summary>
+            Delete Dish Requirement
+            </summary>
+            <param name="id">Id of target Dish Requirement</param>
+            <remarks>
+            Removes a Dish Requirement from the Database.
+            If there is no Dish Requirement, whose Id matches the given 'id' parameter, 
+            Not Found is returned.
+            If the desired Dish Requirement is the last in the Database it is removed from the Database
+            and its Dish Requirement Id will be used by the next Dish Requirement to be inserted.
+            If the desired Dish Requirement is not the last in the Database, it is swapped with the last
+            Dish Requirement in the Database before it is removed, taking on the last Dish Requirement's
+            Dish Id and Supply Category Id before removing it and freeing up the last 
+            Dish Requirement's Id for the next Dish Requirement to be inserted.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.EmployeesController.GetEmployees">
+            <summary>
+            Get Employees
+            </summary>
+            <remarks>
+            Returns a collection of all Employees(20 max, unless specified otherwise with query string).
+            Each item in the collection contins the Employee Id,
+            First and Last Names, Title of Position, Date when the employee started working,
+            the Id of the Location where the Employee works and the number of hours the 
+            Employee works each week
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.EmployeesController.GetEmployeeBasic(System.Int32)">
+            <summary>
+            Get Employee Basic
+            </summary>
+            <param name="id">Id of Desired Employee</param>
+            <remarks>
+            Returns the Employee, whose Employee Id corresponds to the given Id parameter.
+            The returned object contains the Employee Id, First and Last Names,
+            Weekly Hours, Date of employment, the Id of the Location where the employee works,
+            An empty Managements collection and empty Position and Location objects.
+            If no employee with given Id exists, Not Found is returned instead
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.EmployeesController.GetEmployee(System.Int32)">
+            <summary>
+            Get Employee
+            </summary>
+            <param name="id">Id of Desired Employee</param>
+            <remarks>
+            Returns the Employee, whose Employee Id corresponds to the given Id parameter.
+            The returned object contains the Employee Id, First and Last Names,
+            Weekly Hours, Date of employment, the Id of the Location where the employee works,
+            the Title of the Employee's position, their weekly salary,
+            An empty Managements collection and empty Position and Location objects.
+            If no employee with given Id exists, Not Found is returned instead
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.EmployeesController.GetSalary(System.Int32)">
+            <summary>
+            Get Employee Salary
+            </summary>
+            <param name="id">Id of Employee</param>
+            <remarks>
+            Returns a string collection describing the Weekly, Monthly and Early
+            Salaries of the Employee whose Id matches the given parameter
+            If no Employee with given Id exists, Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.EmployeesController.GetEmployeesQueried(System.String)">
+            <summary>
+            Get Employees Queried
+            </summary>
+            <remarks>
+            Returns a list of Employees according to the specified query
+            Query Keywords: Filter, Started(Optional: Before), SortBy(Optional: Desc), PgInd and PgSz.
+            Keywords are followed by '=', a string parameter, and, if further keywords
+            are to be added afterwards, the Ampersand Separator
+            Filter: Only return Employees where the First Name,
+            Last Name or Position Title contains the given string.
+            SortBy: Employees will be ordered in ascending order by the given parameter;
+            'FirstName', 'LastName', 'Title'/'Position' and 'Location' are valid Sort Targets.
+            Any other parameter will result in an ID sort.
+            Desc: If SortBy is used, and the string parameter is 'true',
+            Employees wil be returned in Descending Order.
+            PgInd: If the following int is greater than 0 and the PgSz 
+            keyword is also present, Employees will be paged and
+            page 'PgInd' of size 'PgSz' will be returned.
+            PgSz: If the following int is greater than 0 and the PgInd 
+            keyword is also present, Employees will be paged and
+            page 'PgInd' of size 'PgSz' will be returned.
+            Started: Only returns Employees that started working after the
+            following parameter, which must parse to a valid Date
+            Before: If Started is used and the following parameter is 'true'
+            , only Employees that started working before the Started Parameter
+            will be returned.
+            Any of the Keywords can be used or ommited.
+            Using a keyword more than once will result in only the occurence being recognized.
+            If a keyword is followed by an incorrectly formatted parameter, the keyword will be ignored.
+            Order of Query Operations: Started > Filter > Sort > Pagination
+            Any improperly formatted text will be ignored.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.EmployeesController.UpdateEmployee(System.Int32,McJenny.WebAPI.Data.Models.Employee)">
+            <summary>
+            Update Employee
+            </summary>
+            <param name="id">The Id of the target Employee</param>
+            <param name="employee">An Employee object whose properties are to be transfered 
+            to the existing Employee</param>
+            <remarks>
+            Updates the values of an existing Employee, whose Id corresponds to the given parameter,
+            using the values from the 'employee' parameter.
+            Only the First Name, Last Name, Location Id, Position Id, Weekly Hours
+            and Starting Date of the Employee may be updated through the API.
+            The Location and Position is automatically changed by changing the 
+            LocationId and PositionId values.
+            For its Management relationship the Managements API 
+            Controller must be used.
+            The Employee Id may not be updated.
+            The given parameter of type Employee may contain a First Name,
+            Last Name, Location Id, Position Id, Weekly Hours and
+            Starting Date.
+            If any of these are their data type's default value they will
+            be ignored.
+            Additionally empty objects for the Position and Location, as well
+            as an empty collection of Managements must be provided, along
+            with an Employee Id of 0
+            The Employee Id Parameter must correspond to an existing Employee, otherwise
+            Not Found is returned
+            If the Employee Parameter is incorrect, Bad Request is returned
+            Employee parameter errors:
+            (1) The Employee Id is not 0, 
+            (2) The First Name or Last Name strings are empty,
+            (3) The First Name or Last Name strings are longer than 50 characters,
+            (4) Starting Date is the default value of DateTime,
+            (5) Managements is null
+            (6) Managements is not an empty collection
+            (7) Location or Position are not null
+            (8) Weekly Hours is less than 0 or more tha 167
+            (9) The Location Id does not correspond to a Location
+            (10) The Position Id does not correspond to a Position
+            (11) The Position Id corresponds to the 'Manager' position,
+            but the Location Id corresponds to a Location that already
+            has a different Employee as Manager.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.EmployeesController.CreateEmployee(McJenny.WebAPI.Data.Models.Employee)">
+            <summary>
+            Create Employee
+            </summary>
+            <param name="employee">An Employee object to be added to the Database</param>
+            <remarks>
+            Creates a new Employee and inserts it into the Database
+            using the values from the given 'employee' parameter.
+            Only the First Name, Last Name, Position Id, Location Id, Weekly Hours
+            and Starting Date of the Employee may be set.
+            Its Position and Location will be automatically determined by the
+            given Position Id and Location Id.
+            For its Management relationship the Managements API 
+            Controller must be used.
+            The Employee Id may not be set. The Databse will automatically
+            assign it a new Id, equivalent to the last Employee Id in the Database + 1.
+            The given parameter of type Employee must contain a First Name,
+            Last Name, Location Id, Position Id, Weekly Hours and Starting Date.
+            Additionally empty objects for the Position and Location, as well as
+            an empty collection
+            of Managements and an Employee Id of 0.
+            If the Employee parameter is incorrect, Bad Request is returned
+            Employee parameter errors:
+            (1) The Employee Id is not 0, 
+            (2) The First Name or Last Name strings are empty,
+            (3) The First Name or Last Name strings are longer than 50 characters,
+            (4) The Starting Date is equivalent to the default value of DateTime,
+            (5) Managements is null,
+            (6) Managements is not empty collections.
+            (7) Weekly Hours are less than 0 or more than 167,
+            (8) Position or Location are not empty objects,
+            (9) The Position Id does not correspond to an existing Position,
+            (10) The Location Id does not correspond to an existing Location,
+            (11) The Position Id corresponds to the 'Manager' position,
+            but the Location Id corresponds to a Location with
+            a different Employee as its Manager.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.EmployeesController.DeleteEmployee(System.Int32)">
+            <summary>
+            Delete Employee
+            </summary>
+            <param name="id">Id of target Employee</param>
+            <remarks>
+            Removes an Employee from the Database.
+            If there is no Employee, whose Id matches the given Id parameter, 
+            Not Found is returned.
+            If the desired Employee is the last in the Database, and it has no
+            Management relationship, it is removed from the Database
+            and its Employee Id will be used by the next Employee to be inserted.
+            If the desired Employee is not the last in the Database, and it has no
+            Management relationship, it is swapped with the last
+            Employee in the Database before it is removed, giving the last Employee in the Database
+            the Id of the deleted Employee and freeing up the last Employee's Id for
+            the next Employee to be inserted.
+            If the desired Employee has a Management relationship,
+            it is turned into a blank Employee, so as not to violate its relationship.
+            Its First and Last Names will be changed to reflect that fact.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.LocationsController.GetLocations">
+            <summary>
+            Get Locations
+            </summary>
+            <remarks>
+            Returns a collection of all the Locations(max 20, unless specified 
+            otherwise in query), formatted to include:
+             the Locations' Id, Abreviated Country, Abreviated State,
+             Country, State, City, Street Address, Menu Id, Date of 
+             Opening and Schedule.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.LocationsController.GetLocation(System.Int32)">
+            <summary>
+            Get Location
+            </summary>
+            <param name="id">Id of the desired Location</param>
+            <remarks>
+            Returns the Location corresponding to the given 'id' parameter,
+            formatted to include: the Location's Id, Abreviated Country, Abreviated State,
+            Country, State, City, Street Address, Menu Id, Date of 
+            Opening and Schedule.
+            If no Location with specified ID exits,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.LocationsController.GetLocationBasic(System.Int32)">
+            <summary>
+            Get Location Basic
+            </summary>
+            <param name="id">Id of desired Location</param>
+            <remarks>
+            Returns the Location object whose Location Id matches the given 'id' 
+            parameter.
+            A Location object will contain the Location Id, Abreviated Country, Abreviated State,
+            Country, State, City, Street Address, Menu Id, ScheduleId, Date of 
+            Opening, Managements, Employees, Menu, Schedule and Supply Links.
+            If no Location with specified ID exits,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.LocationsController.GetEmployees(System.Int32)">
+            <summary>
+            Get Location Employees
+            </summary>
+            <param name="id">Id of desired Location</param>
+            <remarks>
+            Returns a collection of Employees currently working
+            at the Location whose Location Id matches the given
+            'id' parameter, formatted to include each Employee's
+            First Name, Last Name, Employee Id and Position Title.
+            If no Location with the specified Id exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.LocationsController.GetSuppliers(System.Int32)">
+            <summary>
+            Get Location Suppliers
+            </summary>
+            <param name="id">Id of desired Location</param>
+            <remarks>
+            Returns a collection of the Suppliers currently providing
+            goods to the Location whose Id matches the given 'id' parameter,
+            formatted to include: the Supplier Id, Name, Abreviated Country,
+            Abreviated State and City.
+            If no Location with the specified Id exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.LocationsController.GetLinks(System.Int32)">
+            <summary>
+            Get Location Supply Links
+            </summary>
+            <param name="id">Id of desired Location</param>
+            <remarks>
+            Returns a collection of strings detailing the Supply Link
+            relationships between the Location whose Id matches the
+            given 'id' parameter and the Suppliers it works with,
+            along with the specific categories each supplier provides.
+            If no Location with the specified Id exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.LocationsController.GetItems(System.Int32)">
+            <summary>
+            Get Location Menu
+            </summary>
+            <param name="id">Id of desired Location</param>
+            <remarks>
+            Returns a collection of Dish objects,
+            representing the Dishes available at the Location
+            whose Location Id matches the given 'id' parameter.
+            If not Location with specified Id exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.LocationsController.GetLocationsQueried(System.String)">
+            <summary>
+            Get Location Queried
+            </summary>
+            <param name="query">Query String</param>
+            <remarks>
+            Returns a list of Locations according to the specified query
+            Query Keywords: Filter, Open(Optional: Before), SortBy(Optional: Desc), PgInd and PgSz.
+            Keywords are followed by '=', a string parameter, and, if further keywords
+            are to be added afterwards, the Ampersand Separator
+            Filter: Only return Locations where the Abreviated
+            Country, Abreviated State, Country, State, City or Street
+            contain the given string.
+            SortBy: Locations will be ordered in ascending order.
+            Sort options: 'Country', 'State', 'City'/'Town', 'Street' and 'Menu'.
+            If the string parameter is anything else the sorting criteria
+            will be the ID.
+            Desc: If SortBy is used, and the string parameter is 'true',
+            Locations wil be returned in Descending Order.
+            PgInd: If the following int is greater than 0 and the PgSz 
+            keyword is also present, Locations will be paged and
+            page 'PgInd' of size 'PgSz' will be returned.
+            PgSz: If the following int is greater than 0 and the PgInd 
+            keyword is also present, Location will be paged and
+            page 'PgInd' of size 'PgSz' will be returned.
+            Open: Only Locations opened after the date paramaneter
+            will be returned.
+            Before: If the 'Open' keyword is used, only 
+            Locations opened before the date parameter will be returned.
+            Any of the Keywords can be used or ommited.
+            Using a keyword more than once will result in only the first occurence being recognized.
+            If a keyword is followed by an incorrectly formatted parameter, that
+            keyword will be ignored.
+            Order of Query Operations: Opened > Filter > Sort > Pagination
+            Any improperly formatted text will be ignored.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.LocationsController.UpdateLocation(System.Int32,McJenny.WebAPI.Data.Models.Location)">
+            <summary>
+            Update Location
+            </summary>
+            <param name="id">Id of the target Location</param>
+            <param name="location">A Location object whose properties
+            are to be transfered to the existing Location</param>
+            <remarks>
+            Updates the values of an existing Location, whose Id corresponds 
+            to the given 'id' parameter, using the values from a 'location' parameter.
+            Only the Abreviated Country, Abreviated State, Country, State, City,
+            Street Address, Menu Id, Schedule Id and Opening Date of the Location
+            may be updated through the API.
+            Its Employees, Menu and Schedule are automatically determined.
+            For its relationships(Managements and Supply Links) their respective API
+            Controllers must be used.
+            The Location Id may not be updated.
+            The given parameter of type Location may contain an Abreviated Country,
+            Abreviated State, Country, State, City, Street, MenuId, ScheduleId
+            and Opening Date.
+            The Location Id must be 0.
+            Additionally null objects can be provided for the Menu and Schedule.
+            Empty collections must be provided for the Managements and Employees.
+            The Location Id Parameter must correspond to an existing Location, 
+            otherwise Not Found is returned.
+            If the Location parameter is incorrect, Bad Request is returned.
+            Location parameter errors:
+            (1) The Location Id is not 0, 
+            (2) The Abreviated Country or Abreviated State strings 
+            are longer than 4 characters,
+            (3) The Country, State, City or Street strings are longer than 50 characters,
+            (4) The Abreviated Country, Abreviated State, City and Street strings
+            are the same as another Location's,
+            (5) Managements or Employees are null.
+            (6) Managements or Employees are not empty collections.
+            (7) Menu or Schedule are not null.
+            (8) MenuId does not match an exiting Menu.
+            (9) ScheduleId does not match an existing Schedule.
+            (10) Opening Date is later than today.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.LocationsController.CreateLocation(McJenny.WebAPI.Data.Models.Location)">
+            <summary>
+            Create Location
+            </summary>
+            <param name="location">A Location to add to the Database</param>
+            <remarks>
+            Creates a new Location and inserts it into the Database
+            using the values from the 'location' parameter.
+            Only the Abreviated Country, Abreviated State, Country, State, 
+            City, Street Address, Menu Id, Schedule Id and Opening Date
+            of the Location may be set.
+            Menu and Schedule are automatically determined.
+            For its relationships(Employees and Managements) their respective API
+            Controllers must be used.
+            The Location Id may not be set. The Database will automatically
+            assign it a new Id, equivalent to the last Location Id in the Database + 1.
+            The given parameter of type Location may contain an Abreviated Country,
+            Abreviated State, Country, State, City, Street, Menu Id, Schedule Id and
+            Opening Date.
+            Null objects for Menu and Schedule may be provided.
+            Empty collections are required for Managements and Employees.
+            A Location Id of 0 may also be inluded.
+            If the Location parameter is incorrect, Bad Request is returned
+            Dish parameter errors:
+            (1) The Location Id is not 0, 
+            (2) The Abreviated Country or Abreviated State strings 
+            are longer than 4 characters,
+            (3) The Country, State, City or Street strings are longer than 50 characters,
+            (4) The Abreviated Country, Abreviated State, City and Street strings
+            are the same as another Location's,
+            (5) Managements or Employees are null.
+            (6) Managements or Employees are not empty collections.
+            (7) Menu or Schedule are not null.
+            (8) MenuId does not match an exiting Menu.
+            (9) ScheduleId does not match an existing Schedule.
+            (10) Opening Date is later than today.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.LocationsController.DeleteLocation(System.Int32)">
+            <summary>
+            Delete Location
+            </summary>
+            <param name="id">Id of target Location</param>
+            <remarks>
+            Removes a Location from the Database.
+            If there is no Location, whose Id matches the given 'id' parameter, 
+            Not Found is returned.
+            If the desired Location is the last in the Database, and it has no
+            Employee or Management relationships, it is removed from the Database
+            and its Location Id will be used by the next Location to be inserted.
+            If the desired Location is not the last in the Database, and it has no
+            Employee or Management relationships, it is swapped with the last
+            Location in the Database before it is removed, giving the last Location in the Database
+            the Id of the deleted Location and freeing up the last Location's Id for
+            the next Location to be inserted.
+            If the desired Location has a Management or any Employees relationships,
+            it is turned into a blank Location, so a not to violate its relationships.
+            Its Country will be changed to reflect that fact.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.ManagementsController.GetManagements">
+            <summary>
+            Get Managements
+            </summary>
+            <remarks>
+            Returns a collection of strings explaining the Management
+            relationships between the Locations and Employees that manage them.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.ManagementsController.GetManagement(System.Int32)">
+            <summary>
+            Get Management
+            </summary>
+            <param name="id">Id of target Management</param>
+            <remarks>
+            Returns a string explaining the Management relationship
+            between a Location of Location Id and Employee of Manager Id.
+            If no Management with specified 'id' exists,
+            Not Found is returned.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.ManagementsController.GetManagementBasic(System.Int32)">
+            <summary>
+            Get Management Basic
+            </summary>
+            <param name="id">Id of target Management</param>
+            <remarks>
+            Returns a Management object whose Management Id
+            matches the 'id' parameter.
+            If no Management with specified 'id' exists
+            Not Found is returned
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.ManagementsController.CreateManagement(McJenny.WebAPI.Data.Models.Management)">
+            <summary>
+            Create Management
+            </summary>
+            <param name="management">Management to Create</param>
+            <remarks>
+            Creates a new Management and inserts it into the Database
+            using the values from the provided management parameter.
+            Only the Manager Id and Location Id of the Management may be set.
+            Its Manager and Location will be automatically set based on the
+            Manager Id and Loction Id.
+            The Mnagement Id may not be set. The Databse will automatically
+            assign it a new Id, equivalent to the last Management Id in the Database + 1.
+            The given parameter of type Management must contain a Manager Id and
+            Location Id, belonging to a valid Employee and Location.
+            If the 'management' parameter is incorrect, Bad Request is returned.
+            Management parameter errors:
+            (1) The Management Id is not 0, 
+            (2) The Manager Id does not match any Employee's Employee Id,
+            (3) The Location Id does not match any Location's Location Id,
+            (4) The Manager Id matches an Employee that already manages a different Location,
+            (5) The Location Id matches a Location that is already managed by a different Employee,
+            (6) Another Management with the same Manager Id and Location Id values exists.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.ManagementsController.DeleteManagement(System.Int32)">
+            <summary>
+            Delete Management
+            </summary>
+            <param name="id">Id of target Management</param>
+            <remarks>
+            Removes a Management from the Database.
+            If there is no Management, whose Id matches the given 'id' parameter, 
+            Not Found is returned.
+            If the desired Management is the last in the Database it is removed from the Database
+            and its Management Id will be used by the next Management to be inserted.
+            If the desired Management is not the last in the Database, it is swapped with the last
+            Management in the Database before it is removed, taking on the last Management's
+            Location Id and Manager Id before removing it and freeing up the last 
+            Management's Id for the next Management to be inserted.
+            </remarks>
+        </member>
+        <member name="T:McJenny.WebAPI.Controllers.MenuItemsController">
+            <summary>
+            Menu Items API Controller
+            </summary>
+            <remarks>
+            Manages the Menu Item Relationships between Menus and Dishes
+            A Menu Item is a Many to Many relationship between
+            Menus and Dishes
+            Indicating which Dishes appear on which Menus
+            Does not include a PUT/PATCH method
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.MenuItemsController.GetMenuItems">
+            <summary>
+            Get All Menu Items
+            </summary>
+            <remarks>
+            Get A list of all the Relations between Menus and Dishes, 
+            If a Menu Item exists between two entities, it means that Menu contains that Dish
+            It is a Many to Many relationship
+            A Menu may contain as many Dishes as desired,
+            Likewise a Dish may appear on just as many Menus
+            </remarks>
+            <returns>200 Ok</returns>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.MenuItemsController.GetMenuItem(System.Int32)">
+            <summary>
+            Get Menu Item
+            </summary>
+            <remarks>
+            Gets a statement about a Menu Item of the specified Id
+            Explains which Dish is contained in which Menu, according to the Menu Item relanshionship
+            Specifies both the Name and ID of the Dish
+            As well as the ID of the Menu
+            If it returns NotFound, it means that no relation of that Id exists
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.MenuItemsController.GetMenuItemBasic(System.Int32)">
+            <summary>
+            Get Menu Item
+            </summary>
+            <remarks>
+            Returns a Menu Item of given Id 
+            Contains the Id of the Menu Item, the Dish and the Menu
+            If it returns NotFound, it means that no relation of that Id exists
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.MenuItemsController.CreateMenuItem(McJenny.WebAPI.Data.Models.MenuItem)">
+            <summary>
+            Post Menu Item
+            </summary>
+            <remarks>
+            Creates a Menu Item
+            A Menu Item is a Link between a Menu and a Dish
+            If a Menu Item Relationship exists betwee a Menu and a Dish
+            It means that Dish can be found on that Menu
+            It is a Many to Many Relationship
+            Meaning a Menu may contain as many Items as desired
+            Likewise a Dish may appear on just as many Menus
+            The Object required must contain a MenuId and a DishId
+            Both must come from existing Menus and Dishes
+            They must not appear in another Menu Item
+            As duplicates would be redundant
+            The Object must not contain the MenuItemId
+            That is assigned automatically
+            It will be the Id of the last MenuItem+1
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.MenuItemsController.DeleteMenuItem(System.Int32)">
+            <summary>
+            Delete Menu Item
+            </summary>
+            <remarks>
+            Removes a MenuItem relationship 
+            Once a MenuItem is removed
+            The Dish corresponding to its DishId will no longer appear on the
+            Menu corresponding to its MenuId
+            The specified Id must belong to an existing MenuItem
+            Once deleted, the Database will run an Identity Check and the Id 
+            That the Menu Item previously occupied will be taken by the 
+            Next Menu Item to be inserted into the Database
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.MenusController.GetMenuBasic(System.Int32)">
+            <summary>
+            Get Menu Basic
+            </summary>
+            <param name="id">Id of desired Menu</param>
+            <remarks>
+            Returns a Menu object of the Menu whose Menu Id matches the 
+            given 'id' parameter.
+            If no such Menu exists, Not Found will be returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.MenusController.GetRequirements(System.Int32)">
+            <summary>
+            Get Menu Requirements
+            </summary>
+            <param name="id">Id of desired Menu</param>
+            <remarks>
+            Returns a collection of the Supply Categories required to
+            sustain the Menu whose Menu Id matches the given 'id' parameter, 
+            formated to contain each Supply Category's Id and Name.
+            If no Menu whose Id matches the given 'id' parameter exists,
+            Not Found will be returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.MenusController.GetLocations(System.Int32)">
+            <summary>
+            Get Menu Locations
+            </summary>
+            <param name="id">Id of desired Menu</param>
+            <remarks>
+            Returns a collection of Locations that stock the Menu whose
+            Menu Id matches the given 'id' parameter, formatted to include
+            the Location Id, Abreviated Country, Abreviated State, City and Street 
+            of each Location.
+            If no Menu whose Menu Id matches the given 'id' parameter,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.MenusController.GetDishes(System.Int32)">
+            <summary>
+            Get Menu Dishes
+            </summary>
+            <param name="id">Id of desired Menu</param>
+            <remarks>
+            Returns a collection of strings containing the Names of
+            the Dishes available on the Menu
+            whose Menu Id matches the given 'id' parameter.
+            If no Menu whose Menu Id matches the 'id' parameter exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.MenusController.CreateMenu(McJenny.WebAPI.Data.Models.Menu)">
+            <summary>
+            Create Menu
+            </summary>
+            <param name="menu">Menu to be inserted into the Database</param>
+            <remarks>
+            Creates a new Menu and inserts it into the Database.
+            A Menu object is just a container for a Menu Id to be used in relationships.
+            The Menu Id is automatically set by the Database, according to the last
+            Menu's Id + 1.
+            As such, the 'menu' parameter should be an empty Menu object.
+            If the 'menu' parameter is incorrect, Bad Request is returned.
+            Menu parameter errors:
+            (1) The Menu Id is not 0, 
+            (2) Locations or Dishes are not empty collections,
+            (3) Locations or Dishes are null. 
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.MenusController.DeleteMenu(System.Int32)">
+            <summary>
+            Delete Menu
+            </summary>
+            <param name="id">Id of target Menu</param>
+            <remarks>
+            Removes a Menu from the Database.
+            If there is no Menu, whose Id matches the given 'id' parameter, 
+            Not Found is returned
+            If the desired Menuis the last in the Database, and it has no
+            Menu Item relationships or Locations, it is removed from the Database
+            and its Menu Id will be used by the next Menu to be inserted.
+            If the desired Menu is not the last in the Database, and it has no
+            Menu Item relationships or Locations, it is swapped with the last
+            Menu in the Database, taking on its Location and Menu Items, while
+            before the last Menu is removed, freeing up the last Menu's Id for
+            the next Menu to be inserted.
+            If the desired Menu has any Menu Item relationships or Locations,
+            it cannot be deleted, and Bad Request will be returned.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.PositionsController.GetPositions">
+            <summary>
+            Get Positions
+            </summary>
+            <remarks>
+            Returns a collection of all Positions, formatted to includ
+            Position Id, Title and Hourly Wage.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.PositionsController.GetPosition(System.Int32)">
+            <summary>
+            Get Position
+            </summary>
+            <param name="id">Id of desired Position</param>
+            <remarks>
+            Returns the Title and Hourly Wage of the Position whose Id
+            matches the 'id' parameter.
+            If no such Position exists, Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.PositionsController.GetPositionBasic(System.Int32)">
+            <summary>
+            Get Position Basic
+            </summary>
+            <param name="id">Id of desired Position</param>
+            <remarks>
+            Returns a Position object whose Position Id matches the
+            given 'id' parameter. It contains the Position Id, Title,
+            Hourly Wage and an empty list of Employees.
+            If no Position whose Id matches the 'id' parameter exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.PositionsController.GetEmployees(System.Int32)">
+            <summary>
+            Get Position Employees
+            </summary>
+            <param name="id">Id of desired Position</param>
+            <remarks>
+            Returns a collection of strings identifying
+            the Employees who occupy the Position whose Id matches
+            the given 'id' parameter, formated to incud each Employees
+            Id, as well as the First and Last Names.
+            If no Position with specified Id exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.PositionsController.GetPositionsQueried(System.String)">
+            <summary>
+            Get Positions Queried
+            </summary>
+            <param name="query">Query String</param>
+            <remarks>
+            Returns a list of Positions according to the specified query
+            Query Keywords: Filter, SortBy(Optional: Desc), PgInd and PgSz.
+            Keywords are followed by '=', a string parameter, and, if further keywords
+            are to be added afterwards, the Ampersand Separator
+            Filter: Only return Positions where the Title
+            contains the given string.
+            SortBy: Positions will be ordered in ascending order by a criteria
+            matching the string parameter.
+            Sort Options: 'Title'/'Name' and 'Wage'/'Salary'.
+            If the string parameter is anything else, the Positions
+            will be sorted by their Position IDs.
+            Desc: If SortBy is used, and the string parameter is 'true',
+            Positions wil be returned in Descending Order.
+            PgInd: If the following int is greater than 0 and the PgSz 
+            keyword is also present, Positions will be paged and
+            page 'PgInd' of size 'PgSz' will be returned.
+            PgSz: If the following int is greater than 0 and the PgInd 
+            keyword is also present, Positions will be paged and
+            page 'PgInd' of size 'PgSz' will be returned.
+            Any of the Keywords can be used or ommited.
+            Using a keyword more than once will result in only the first occurence being recognized.
+            If a keyword is followed by an incorrectly formatted parameter, the keyword will be ignored.
+            Order of Query Operations: Filter > Sort > Pagination
+            Any improperly formatted text will be ignored.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.PositionsController.UpdatePosition(System.Int32,McJenny.WebAPI.Data.Models.Position)">
+            <summary>
+            Update Position
+            </summary>
+            <param name="id">Id of the target Position</param>
+            <param name="position">A Position object whose properties 
+            are to be transfered to the existing Position</param>
+            <remarks>
+            Updates the values of an existing Position, whose Id 
+            corresponds to the given 'id' parameter,
+            using the values from the 'position' parameter.
+            Only the Title and Wage of the Position may be updated through this API.
+            Its Employees are determined by which Employees have this Position's
+            Id as their Position Id and can be changed through the Employee's API
+            controller.
+            The Position Id may not be manually updated.
+            The given parameter of type Position may contain a Title string and Wage decimal.
+            It may additionally contain an empty collection of Employees and a
+            Position Id of 0.
+            The 'id' Parameter must correspond to an existing Position, otherwise
+            Not Found is returned.
+            If the 'position' parameter is incorrect, Bad Request is returned
+            Position parameter errors:
+            (1) The Position Id is not 0, 
+            (2) The Title string is longer than 50 characters,
+            (3) The Title string is the same as another Position's Title,
+            (4) Employees is null,
+            (5) Employees is not an empty collection,
+            (6) Wage is lower than 0m.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.PositionsController.CreatePosition(McJenny.WebAPI.Data.Models.Position)">
+            <summary>
+            Create Position
+            </summary>
+            <param name="position">A Position object to be added to the Database</param>
+            <remarks>
+            Creates a new Position and inserts it into the Database
+            using the values from the 'position' parameter.
+            Only the Title and Wage of the Position may be set.
+            The Employees are automatically determined by which Employees'
+            Position Id matches the Position's, and may only be changed through
+            the Employee API controller.
+            The Position Id may not be set. The Databse will automatically
+            assign it a new Id, equivalent to the last Position Id in the Database + 1.
+            The given parameter of type Position must contain a Title string and
+            Wage decimal. It may additionally hold an empty collection
+            of Employees and a Position Id of 0.
+            If the 'position' parameter is incorrect, Bad Request will be returned.
+            Position parameter errors:
+            (1) The Position Id is not 0, 
+            (2) The Title string is empty,
+            (3) The Title string is longer than 50 characters,
+            (4) The Title string is the same as another Position's Title,
+            (5) Employees is null,
+            (6) Employees is not an empty collection,
+            (7) Wage is smaller than 0m.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.PositionsController.DeletePosition(System.Int32)">
+            <summary>
+            Delete Position
+            </summary>
+            <param name="id">Id of target Position</param>
+            <remarks>
+            Removes a Position from the Database.
+            If there is no Position, whose Id matches the given 'id' parameter, 
+            Not Found is returned.
+            If the desired Position is the last in the Database, and it has no
+            Employees, it is removed from the Database
+            and its Position Id will be used by the next Position to be inserted.
+            If the desired Position is not the last in the Database, and it has no
+            Menu Item or Dish Requirement relationships,Employees it is swapped with the last
+            Position, taking on its Title, Wage and Employees, and the last Position is removed,
+            freeing up the last Positin's Id for
+            the next Position to be inserted.
+            If the desired Position Employees,
+            it is turned into a blank Position, so a not to violate its relationships.
+            Its Title will be changed to reflect that fact.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SchedulesController.GetSchedules">
+            <summary>
+            Get Schedules
+            </summary>
+            <remarks>
+            Returns a collection of all Schedules(max 20, unless queried otherwise)
+            forated to incude the Schedule Id and Timetable.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SchedulesController.GetSchedule(System.Int32)">
+            <summary>
+            Get Shedule
+            </summary>
+            <param name="id">Id of desired Schedule</param>
+            <remarks>
+            Returns the Schedule whose Id matches the given 'id' parameter.
+            If no such Schedule exists, Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SchedulesController.GetScheduleBasic(System.Int32)">
+            <summary>
+            Get Schedule Basic
+            </summary>
+            <param name="id">Id of desired Schedule</param>
+            <remarks>
+            Returns a Schedule object from the Schedule whose Id matches
+            the given 'id' parameter. It Includes a Schedule Id, Timetable 
+            and an empty collection of Locations.
+            If no Schedule whose Id matches the 'id' parameter exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SchedulesController.GetLocations(System.Int32)">
+            <summary>
+            Get Schedule Locations
+            </summary>
+            <param name="id">If of desired Schedule</param>
+            <remarks>
+            Returns a collection of the Locations that implement the Schedule
+            whose Id matches the given 'id' parameter, formated to include
+            each Location's Id, Abreviated Country, Abreviated State,
+            City and Street.
+            If no Schedule whose Id matches the given 'id' exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SchedulesController.UpdateSchedule(System.Int32,McJenny.WebAPI.Data.Models.Schedule)">
+            <summary>
+            Update Schedule
+            </summary>
+            <param name="id">Id of target Schedule</param>
+            <param name="schedule">A Schedule object whose properties are
+            to be transfered to the existing Schedule</param>
+            <remarks>
+            Updates the values of an existing Schedule, whose Id corresponds 
+            to the given 'id' parameter, using the values from the 'schedule' parameter.
+            Only the Timetable of the Schedule may be updated through this API.
+            Its Locations are automatically determined based on which Locations' 
+            Schedule Id matches the Schedule's and can only be changed through the
+            Location's API Controller.
+            The Schedule Id may not be updated.
+            The given parameter of type Schedule may contain a Timetable, an empty collection
+            of Locations and a Schedule Id of 0.
+            The 'id' parameter must correspond to an existing Schedule, otherwise
+            Not Found is returned.
+            If the Schedule parameter is incorrect, Bad Request is returned.
+            Schedule parameter errors:
+            (1) The Schedule Id is not 0, 
+            (2) The Timetable string is longer than 50 characters,
+            (3) Locations is null,
+            (4) Locations is not an empty collection.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SchedulesController.CreateSchedule(McJenny.WebAPI.Data.Models.Schedule)">
+            <summary>
+            Create Schedule
+            </summary>
+            <param name="schedule">A Schedule object to be added to the Database</param>
+            <remarks>
+            Creates a new Schedule and inserts it into the Database
+            using the values from the 'schedule' parameter.
+            Only the Timetable of the Schedule may be set.
+            The Locations are automatically determined by which Locations have
+            a Schedule Id matching the Schedule's Id. This can only be changed using
+            the Locations API controller.
+            The Schedule Id may not be set. The Databse will automatically
+            assign it a new Id, equivalent to the last Schedule Id in the Database + 1.
+            The given parameter of type Schedule must contain a Timetable string.
+            Additionally, it may contain an empty collection
+            of Locations and a Schedule Id of 0.
+            If the 'schedule' parameter is incorrect, Bad Request is returned.
+            Schedule parameter errors:
+            (1) The Schedule Id is not 0, 
+            (2) The Timetable string is empty,
+            (3) The Timetable string is longer than 50 characters,
+            (4) Locations is null,
+            (5) Locations is not an empty collection.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SchedulesController.DeleteSchedules(System.Int32)">
+            <summary>
+            Delete Schedule
+            </summary>
+            <param name="id">Id of target Schedule</param>
+            <remarks>
+            Removes a Schedule from the Database.
+            If there is no Schedule, whose Id matches the given 'id' parameter, 
+            Not Found is returned.
+            If the desired Schedule is the last in the Database, and it has no
+            Locations, it is removed from the Database
+            and its Schedule Id will be used by the next Schedule to be inserted.
+            If the desired Schedule is not the last in the Database, and it has no
+            Locations, it takes on the last Schedule's Timetable and Locations, 
+            and the last Schedule is deleted instead, freeing up its Id
+            for the next Schedule to be inserted.
+            If the target Schedule has any Positions depending on it,
+            it is turned into a blank Schedule, so a not to violate its relationships.
+            Its Timetable will be changed to reflect that fact.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SuppliersController.GetSuppliers">
+            <summary>
+            Get Suppliers
+            </summary>
+            <remarks>
+            Returns a collection of strings(20 max, unless queried otherwise)
+            formatted to include each Supplier's Id, Name, Abreviated Country,
+            Abreviated State and City.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SuppliersController.GetSupplier(System.Int32)">
+            <summary>
+            Get Supplier
+            </summary>
+            <param name="id">Id of desired Supplier</param>
+            <remarks>
+            Returns the Supplier whose Id matches the 'id' parameter, formated
+            to include the Supplier Id, Name, Abrevited Country, Abreviated State
+            and City.
+            If no Supplier matching the 'id' parameter exists, 
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SuppliersController.GetSupplierBasic(System.Int32)">
+            <summary>
+            Get Supplier Basic
+            </summary>
+            <param name="id">Id of desired Supplier</param>
+            <remarks>
+            Returns a Supplier object of the Supplier whose Supplier Id
+            matches the 'id' parameter.
+            If no such Supplier exists, Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SuppliersController.GetSupplyCategories(System.Int32)">
+            <summary>
+            Get Supplier Categories
+            </summary>
+            <param name="id">Id of desired Supplier</param>
+            <remarks>
+            Returns a collection of the Supply Categories the Suppplier
+            whose Supplier Id matches the 'id' parameter stocks, formted 
+            to include each Supply Category's Id and Name.
+            If no Supplier whose Id matches the provided 'id' parameter exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SuppliersController.GetLocations(System.Int32)">
+            <summary>
+            Get Supplier Locations
+            </summary>
+            <param name="id">Id of desired Supplier</param>
+            <remarks>
+            Returns a collection of strings of the Locations serviced by the Supplier
+            whose Supplier Id matches the 'id' parameter, formated to include
+            each Location's Id, Abreviated Country, Abreviated State, City and Street.
+            If no Supplier whose Supplier Id matches the given 'id' parameter exists,
+            Not Found is returned.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SuppliersController.GetSupplierLinks(System.Int32)">
+            <summary>
+            Get Supplier Links
+            </summary>
+            <param name="id">Id of desired Supplier</param>
+            <remarks>
+            Returns a collection of strings explaining the Supply Link
+            relationship between Locations, the Supply Categories provided them and the Supplier
+            whose Id matches the given 'id' parameter, formated to include
+            each Supply Category's Id and Name, as well
+            as each Location's Id, Abreviated Country, Abreviated State, City and Street
+            Address.
+            If no Supplier whose Id matches the given 'id' parameter exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SuppliersController.GetSuppliersQueried(System.String)">
+            <summary>
+            Get Suppliers Queried
+            </summary>
+            <param name="query">Query String</param>
+            <remarks>
+            Returns a collection of Suppliers according to the 'query' parameter, formated
+            to include each Supplier's Id, Name, Abreviated Country, Abreviated State,
+            Country, State and City.
+            Query Keywords: Filter, SortBy(Optional: Desc), PgInd and PgSz.
+            Keywords are followed by '=', a string parameter, and, if further keywords
+            are to be added afterwards, the Ampersand Separator.
+            Filter: Only return Suppliers where the Name, Abreviated Country,
+            Abreviated State, Country, State or City contain the provided string.
+            SortBy: Suppliers will be ordered in ascending order by the provided
+            sorting criteria.
+            Sorting Criteria include 'Name', 'Country', 'State' and 'City'. 
+            Any other string will result in an ID sort.
+            Desc: If SortBy is used, and the string parameter is 'true',
+            Suppliers wil be returned in Descending Order.
+            PgInd: If the following int is greater than 0 and the PgSz 
+            keyword is also present, Suppliers will be paged and
+            page 'PgInd' of size 'PgSz' will be returned.
+            PgSz: If the following int is greater than 0 and the PgInd 
+            keyword is also present, Suppliers will be paged and
+            page 'PgInd' of size 'PgSz' will be returned.
+            Any of the Keywords can be used or ommited.
+            Using a keyword more than once will result in only the first 
+            occurence being recognized.
+            If a keyword is followed by an incorrectly formatted parameter, 
+            the keyword will be ignored.
+            Order of Query Operations: Filter > Sort > Pagination
+            Any improperly formatted text will be ignored.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SuppliersController.UpdateSupplier(System.Int32,McJenny.WebAPI.Data.Models.Supplier)">
+            <summary>
+            Update Supplier
+            </summary>
+            <param name="id">Id of target Supplier</param>
+            <param name="supplier">A Supplier object whose properties 
+            are to be transfered to the existing Suppplier</param>
+            <remarks>
+            Updates the values of an existing Supplier, whose Id corresponds 
+            to the given 'id' parameter,
+            using the values from the 'supplier' parameter.
+            Only the Name, Abreviated Country, Abreviated State, Country, State and City
+            of the Supplier may be updated through this API controller.
+            For its Supplier Stocks and Supply Links relationships, their respective
+            API controllers must be used.
+            The Supplier Id may not be updated.
+            The given parameter of type Supplier may contain a Name, Abreviated Country,
+            Abreviated State, Country, State and City.
+            Additionally empty collections Supplier Stocks and Supply Links, as well as a 
+            Supplier Id of 0 may be included.
+            The 'id' Parameter must correspond to an existing Supplier, otherwise
+            Not Found is returned.
+            If the 'supplier' parameter is incorrect, Bad Request is returned.
+            Supplier parameter errors:
+            (1) The Supplier Id is not 0,
+            (2) The Abreviated Country or Abreviated State strings 
+            are longer than 4 characters,
+            (3) The Name, Country, State or City strings are 
+            longer than 50 characters,
+            (4) Supply Links or Supplier Stocks are null,
+            (5) Supply Links or Supplier Stocks are not empty collections.
+            (6) Another Supplier with the same Name exists.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SuppliersController.CreateSupplier(McJenny.WebAPI.Data.Models.Supplier)">
+            <summary>
+            Create Supplier
+            </summary>
+            <param name="supplier">A Supplier object 
+            to be added to the Database</param>
+            <remarks>
+            Creates a new Supplier and inserts it into the Database
+            using the values from the 'supplier' parameter.
+            Only the Name, Abreviated Country, Abreviated State, Country, State
+            and City of the Supplier may be set.
+            For its Supply Links and Supplier Stocks relationships their 
+            respective API controllers must be used.
+            The Supplier Id may not be set. The Databse will automatically
+            assign it a new Id, equivalent to the last Supplier Id in the Database + 1.
+            The given parameter of type Supplier must contain a Name, Abreviated Country,
+            Abreviated State, Country, State and City.
+            Additionally, it may contain empty collections
+            of Supply Links and Supplier Stocks as well as a Supplier Id of 0.
+            If the 'supplier' parameter is incorrect, Bad Request is returned.
+            Supplier parameter errors:
+            (1) The Supplier Id is not 0, 
+            (2) The Name, Abreviated Country, Abreviated State, Country,
+            State or City strings are empty,
+            (3) The Abreviated Country or Abreviated State strings
+            are longer than 4 characters,
+            (4) The Name, Country, State or City strings are
+            longer than 50 characters,
+            (5) The Name string is the same as another Supplier's Name,
+            (6) Supply Links or Supplier Stocks are null,
+            (7) Supply Links or Supplier Stocks are not empty collections.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SuppliersController.DeleteSupplier(System.Int32)">
+            <summary>
+            Delete Supplier
+            </summary>
+            <param name="id">Id of target Supplier</param>
+            <remarks>
+            Removes a Supplier from the Database.
+            If there is no Supplier, whose Id matches the given 'id' parameter, 
+            Not Found is returned.
+            If the desired Suppler is the last in the Database, and it has no
+            Supply Link or Supplier Stocks relationships, it is removed from the Database
+            and its Supplier Id will be used by the next Supplier to be inserted.
+            If the desired Supplier is not the last in the Database, and it has no
+            Supply Links or Supplier Stocks relationships, it is swapped with the last
+            Supplier in the Database, taking on its Supply Links and Supplier Stocks before,
+            the last Supplier is deleted freeing up the last Supplier Id for
+            the next Supplier to be inserted.
+            If the desired Supplier has any Supply Links or Supplier Stocks relationships,
+            it is turned into a blank Supplier, so a not to violate its relationships.
+            Its Name will be changed to reflect that fact.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplierStocksController.GetSupplierStocks">
+            <summary>
+            Get Supplier Stocks
+            </summary>
+            <remarks>
+            Returns a collection of strings explaining the Supplier Stock
+            relationships between Suppliers and the Supply Categories they 
+            keep. Each string includes the Supplier Stock's Id; the Supplier's
+            Id, Name , Abreviated Country, Abreviated State and City; as well as
+            the Supply Category's Id and Name.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplierStocksController.GetSupplierStock(System.Int32)">
+            <summary>
+            Get Supplier Stock
+            </summary>
+            <param name="id">Id of desired Supplier Stock</param>
+            <remarks>
+            Returns a string explaining the Supplier Stock relationship
+            upheld by the Supplier Stock whose Id matches the given 'id'
+            parameter, formated to include the Supplier's Id, Name,
+            Abreviated Country, Abreviated State and city, as well as the
+            Supply Category's Id and Name.
+            If no Supplier Stock whose Id matches the given 'id'
+            parameter exists, Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplierStocksController.GetSupplierStockBasic(System.Int32)">
+            <summary>
+            Get Supplier Stock Basic
+            </summary>
+            <param name="id">Id of desired Supplier Stock</param>
+            <remarks>
+            Returns a Supplier Stock object from the Supplier Stock 
+            whose Id matches the given 'id' parameter. 
+            The Supplier Stock includes its own Id, the Id of the Supplier,
+            that of the Supply Category, as well as empty Supplier and 
+            Supply Category objects.
+            If no Supplier Stock whose Id matches the given 'id' parameter
+            exists, Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplierStocksController.CreateSupplierStock(McJenny.WebAPI.Data.Models.SupplierStock)">
+            <summary>
+            Create Supplier Stock
+            </summary>
+            <param name="supplierStock">Supplier Stock object to be added 
+            to the Database</param>
+            <remarks>
+            Creates a new Supplier Stock and inserts it into the Database
+            using the values from the provided 'supplierStock' parameter.
+            Only the Supplier Id and Supply Category Id of the Suppleir Stock
+            may be set.
+            Its Suppleir and Supply Category will be automatically set based on the
+            Supplier Id and Supply Category Id.
+            The Supplier Stock Id may not be set. The Databse will automatically
+            assign it a new Id, equivalent to the last Supplier Stock Id 
+            in the Database + 1.
+            The given parameter of type Supplier Stock must contain a 
+            Supplier Id and Supply Category Id, belonging to a valid Suplier
+            and Supply Category.
+            If the 'supplierStock' parameter is incorrect, Bad Request is returned.
+            Supplier Stock parameter errors:
+            (1) The Supplier Stock Id is not 0, 
+            (2) The Supplier Id does not match any Supplier's Ids,
+            (3) The Supply Category Id does not match any Supply Category's Ids,
+            (4) Another Supplier Stock with the same Supplier Id and Supply Category Id values
+            already exists,
+            (5) Supplier or Supply Category are not null.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplierStocksController.DeleteSupplierStock(System.Int32)">
+            <summary>
+            Delete Supplier Stock
+            </summary>
+            <param name="id">Id of target Supplier Stock</param>
+            <remarks>
+            Removes a Supplier Stock from the Database.
+            If there is no Supplier Stock, whose Id matches the given 'id' parameter, 
+            Not Found is returned.
+            If the desired Supplier is the last in the Database, it is removed from the Database
+            and its Supplier Stock Id will be used by the next Supplier Stock to be inserted.
+            If the desired Supplier Stock is not the last in the Database, it is swapped with the last
+            Supplier Stock in the Database before it is removed, taking on the last Supplier Stock's
+            Supplier Id and Supply Category Id before removing it and freeing up the last 
+            Supplier Stock's Id for the next Supplier Stock to be inserted.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplyCategoriesController.GetSupplyCategories">
+            <summary>
+            Get Supply Categories
+            </summary>
+            <remarks>
+            Returns a collection of all Supply Categories, formated to
+            include each Supply Category's Id and Name.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplyCategoriesController.GetSupplyCategory(System.Int32)">
+            <summary>
+            Get Supply Category
+            </summary>
+            <param name="id">Id of desired Supply Category</param>
+            <remarks>
+            Returns the Name of the Supply Category whose Id matches
+            the given 'id' parameter.
+            If no such Supply Category exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplyCategoriesController.GetSupplyCategoryLinks(System.Int32)">
+            <summary>
+            Get Supply Category Links
+            </summary>
+            <param name="id">Id of desired Supply Category</param>
+            <remarks>
+            Returns a collection of strings explaining the Supply Link
+            relationship between Suppliers, the Location they supply and the provided
+            Supply Category whose Id matches the given 'id' parameter, formated to include
+            each Supplier's Id, Name, Abreviated Country, Abreviated State and City as well
+            as each Location's Id, Abreviated Country, Abreviated State, City and Street
+            Address.
+            If no Supply Category whose Id matches the given 'id' parameter exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplyCategoriesController.GetDishes(System.Int32)">
+            <summary>
+            Get Supply Category Dishes
+            </summary>
+            <param name="id">Id of desired Supply Category</param>
+            <remarks>
+            Returns a collection of the Dishes that require the Supply Category
+            whose Id matches the given 'id' parameter based on the DishRequirement
+            relationship they share, formated to include each Dish's Id and Name
+            If no Supply Category whose Id matches the given 'id' parameter exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplyCategoriesController.GetSuppliers(System.Int32)">
+            <summary>
+            Get Supply Category Suppliers
+            </summary>
+            <param name="id">Id of desired Supply Category</param>
+            <remarks>
+            Returns a collection of the Suppliers that deal in the Supply Category
+            whose Id matches the given 'id' parameter based on the Supplier Stock
+            relationship they share, formated to include each Supplier's Id,
+            Abreviated Country, Abreviated State, City and Name.
+            If no Supply Category whose Id matches the given 'id' parameter exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplyCategoriesController.GetSupplyCategoryBasic(System.Int32)">
+            <summary>
+            Get Supply Category Basic
+            </summary>
+            <param name="id">Id of desired Supply Category</param>
+            <remarks>
+            Returns a Supply Category object whose Id matches the given 'id'
+            parameter, containing the Supply Category Id and Name, as well as empty 
+            collections of Dish Requirements, Supplier Stocks and Supply Links.
+            If no Supply Category whose Id matches the 'id' parameter exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplyCategoriesController.GetSupplyCategoriesQueried(System.String)">
+            <summary>
+            Get Supply Categories Queries
+            </summary>
+            <remarks>
+            Returns a list of Supply Categories according to the specified query,
+            formated to include each Supply Category's Id and Name.
+            Query Keywords: Filter, SortBy(Optional: Desc), PgInd and PgSz.
+            Keywords are followed by '=', a string parameter, and, if further keywords
+            are to be added afterwards, the Ampersand Separator
+            Filter: Only return Supply Categories where the Name
+            contains the given string.
+            SortBy: Supply Categories will be ordered in ascending order by 
+            either their Name, if the string parameter is 'name',
+            or by their ID, if any other string parameter is given.
+            Desc: If SortBy is used, and the string parameter is 'true',
+            Supply Categories wil be returned in Descending Order.
+            PgInd: If the following int is greater than 0 and the PgSz 
+            keyword is also present, Supply Categories will be paged and
+            page 'PgInd' of size 'PgSz' will be returned.
+            PgSz: If the following int is greater than 0 and the PgInd 
+            keyword is also present, Supply Categories will be paged and
+            page 'PgInd' of size 'PgSz' will be returned.
+            Any of the Keywords can be used or ommited.
+            Using a keyword more than once will result in only the 
+            first occurence being recognized.
+            If a keyword is followed by an incorrectly formatted parameter, the keyword will be ignored.
+            Order of Query Operations: Filter > Sort > Pagination
+            Any improperly formatted text will be ignored.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplyCategoriesController.UpdateSupplyCategory(System.Int32,McJenny.WebAPI.Data.Models.SupplyCategory)">
+            <summary>
+            Update Supply Category
+            </summary>
+            <param name="id">Id of target Supply Category</param>
+            <param name="supplyCategory">A Supply Category object whose
+            properties are to be transfered to the existing Supply Category.</param>
+            <remarks>
+            Updates the values of an existing Supply Category, whose Id 
+            corresponds to the given 'id' parameter, using the values
+            from the 'supplyCategory' parameter.
+            Only the Name of the Supply Category may be updated through this API.
+            For its Supply Link, Supplier Stock and Dish Requirement relationships
+            their respective API controllers must be used.
+            The Supply Category Id may not be updated.
+            The given parameter of type Supply Category must contain a Name.
+            Additionally it may contain empty collections for Supply Links,
+            Supplier Stocks and Dish Requirements, as well as a
+            Supply Category Id of 0
+            The 'id' parameter must correspond to an existing Supply Category,
+            otherwise Not Found is returned.
+            If the 'supplyCategory parameter is incorrect, Bad Request is returned.
+            Supply Category parameter errors:
+            (1) The Supply Category Id is not 0, 
+            (2) The Name string is empty,
+            (3) The Name string is longer than 50 characters,
+            (4) The Name string is the same as another Supply Category's Name,
+            (5) Dish Requirements, Supply Links or Supplier Stocks are null,
+            (6) Dish Requirements, Supply Links or Supplier Stocks
+            are not empty collections.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplyCategoriesController.CreateSupplyCategory(McJenny.WebAPI.Data.Models.SupplyCategory)">
+            <summary>
+            Create Supply Category
+            </summary>
+            <param name="supplyCategory">A Supply Category object
+            to be added to the Database</param>
+            <remarks>
+            Creates a new Supply Category and inserts it into the Database,
+            using the values from the 'supplyCategory' parameter.
+            Only the Name of the Supply Category may be set.
+            For its Dish Requirements, Supply Links and Supplie Stocks relationships,
+            their respective API controllers must be used.
+            The Supply Category Id may not be set. The Databse will automatically
+            assign it a new Id, equivalent to the last Supply Category Id 
+            in the Database + 1.
+            The given parameter of type Supply Category may contain a Name.
+            Additionaly, it may also hold empty collections for
+            Dish Requirements, Supply Links and Supplier Stocks, as well as a
+            Supply Category Id of 0.
+            If the Supply Category parameter is incorrect, Bad Request is returned.
+            Supply Category parameter errors:
+            (1) The Supply Category Id is not 0, 
+            (2) The Name string is empty,
+            (3) The Name string is longer than 50 characters,
+            (4) The Name string is the same as another Supply Category's Name,
+            (5) Dish Requirements, Supply Links or Supplier Stocks are null,
+            (6) Dish Requirements, Supply Links or Supplier Stocks are not empty collections.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplyCategoriesController.DeleteSupplyCategory(System.Int32)">
+            <summary>
+            Delete Supply Category
+            </summary>
+            <param name="id">Id of target Supply Category</param>
+            <remarks>
+            Removes a Supply Category from the Database.
+            If there is no Supply Category, whose Id matches the given 'id' parameter, 
+            Not Found is returned.
+            If the desired Supply Category is the last in the Database, and it has no
+            Supply Link, Supplier Stock or Dish Requirement relationships, it is removed
+            from the Database and its Supply Category Id will be used by the next Supply Category
+            to be inserted.
+            If the desired Supply Category is not the last in the Database, and it has no
+            Supply Link, Supplier Stock or Dish Requirement relationships, it is swapped with the last
+            Supply Category in the Database, taking on its relationships and Name, before the last
+            Supply Category is removed, freeing up the last Supply Category's Id for
+            the next Supply Category to be inserted.
+            If the desired Supply Category has any Supply Link, Suplier Stocks or
+            Dish Requirement relationships, it is turned into a blank Supply Category, so as not to
+            violate its relationships.
+            Its Name will be changed to reflect that fact.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplyLinksController.GetSupplyLinks">
+            <summary>
+            Get Supply Links
+            </summary>
+            <remarks>
+            Returns a collection of strings explaining all Supply Link relationships
+            between the Suppliers, Locations and the Supply Categories the one provides
+            to the other. Each string contains the Supply Link's Id; the Location's
+            Id, Abreviated Country, Abreviated State, City and Street Address; the Supplier's
+            Id, Name, Abreviated Country, Abreviated State and City and the Supply Category's
+            Id and Name.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplyLinksController.GetSupplyLink(System.Int32)">
+            <summary>
+            Get Supply Link
+            </summary>
+            <param name="id">Id of desired Supply Link</param>
+            <remarks>
+            Returns a string explaining the Supply Link relationship
+            whose Id matches the given 'id' parameter.
+            The string will contain the Supplier's Id, Name, Abreviated Country, Abreviated
+            State and City; the Location's Id, Abreviated Country, Abreviate State, City and 
+            Street Address and the Supply Category's Id and Name.
+            If no Supply Link whose Id matches the given 'id' parameter exists, 
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplyLinksController.GetSupplyLinkBasic(System.Int32)">
+            <summary>
+            Get Supply Link Basic
+            </summary>
+            <param name="id">Id of desired Supply Link</param>
+            <remarks>
+            Returns a Supply Link object whose Id matches the given
+            'id' parameter. It will contain the Supply Link Id, Supplier Id,
+            Supply Category Id and Location Id, as well as null Supplier,
+            Supply Category and Location objects.
+            If no Supply Link whose Id matches the given 'id' parameter exists,
+            Not Found is returned instead.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplyLinksController.CreateSupplyLink(McJenny.WebAPI.Data.Models.SupplyLink)">
+            <summary>
+            Create Supply Link
+            </summary>
+            <param name="link">Supply Link object to be 
+            added to the Database</param>
+            <remarks>
+            Creates a new Supply Link and inserts it into the Database
+            using the values from the provided 'link' parameter.
+            Only the Supplier Id, Location Id and Supply Category Id of the
+            Supply Link may be set.
+            Its Supplier, Location and Supply Category will be automatically 
+            set based on the Supplier Id, Location Id and Supply Category Id.
+            The Supply Link Id may not be set. The Databse will automatically
+            assign it a new Id, equivalent to the last Supply Link Id in the 
+            Database + 1.
+            The given parameter of type Supply must contain a Supplier Id,
+            Location Id and Supply Category Id, belonging to a valid Supplier,
+            Location and Supply Category. Additionally it may contain empty
+            objects for the Supplier, Location and Supply Category, as well as
+            a Supply Link Id of 0.
+            If the 'link' parameter is incorrect, Bad Request is returned.
+            Supply Link parameter errors:
+            (1) The Supply Link Id is not 0, 
+            (2) The Supplier Id does not match any existing Supplier,
+            (3) The Location Id does not match any existing Location,
+            (4) The Supply Category Id does not match any existing 
+            Supply Category,
+            (5) Another Supply Link with the same Supplier Id, Location Id
+            and Supply Category Id values already exists,
+            (5) Supplier, Location or Supply Category is not null.
+            </remarks>
+        </member>
+        <member name="M:McJenny.WebAPI.Controllers.SupplyLinksController.DeleteSupplyLink(System.Int32)">
+            <summary>
+            Delete Supply Link
+            </summary>
+            <param name="id">Id of target Supply Link</param>
+            <remarks>
+            Removes a Supply Link from the Database.
+            If there is no Supply Link, whose Id matches the given 'id' parameter, 
+            Not Found is returned.
+            If the desired Supply Link is the last in the Database it is removed from the Database
+            and its Supply Link Id will be used by the next Supply Link to be inserted.
+            If the desired Supply Link is not the last in the Database, it is swapped with the last
+            Supply Link, taking on the last Supply Link's Supplier Id, Location Id
+            and Supply Category Id before removing the last Supply Link and freeing up its 
+            Supply Link's Id for the next Supply Link to be inserted.
+            </remarks>
+        </member>
+    </members>
+</doc>

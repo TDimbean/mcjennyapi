@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "oi0My8tVSEHPACf4zDo+lKuaekaBQO6j4tiHg0N2FCqO4sFSVgsU11Dk38dkLKhAhqjL7mF/KUic0jGN8C/7bg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\RoosterMaind\\Desktop\\Ptterns\\McJennyApi\\McJennyAPI\\McJenny.WebAPI3\\McJenny.WebAPI3.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\RoosterMaind\\.nuget\\packages\\microsoft.openapi\\1.1.4\\microsoft.openapi.1.1.4.nupkg.sha512",
+    "C:\\Users\\RoosterMaind\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\5.3.1\\swashbuckle.aspnetcore.swagger.5.3.1.nupkg.sha512",
+    "C:\\Users\\RoosterMaind\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\5.3.1\\swashbuckle.aspnetcore.swaggergen.5.3.1.nupkg.sha512",
+    "C:\\Users\\RoosterMaind\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\5.3.1\\swashbuckle.aspnetcore.swaggerui.5.3.1.nupkg.sha512"
+  ],
+  "logs": []
+}

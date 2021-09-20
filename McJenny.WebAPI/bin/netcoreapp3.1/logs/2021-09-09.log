@@ -1,0 +1,8 @@
+DEBUG init main
+INFO Now listening on: https://localhost:5001
+INFO Now listening on: http://localhost:5000
+INFO Application started. Press Ctrl+C to shut down.
+INFO Hosting environment: Development
+INFO Content root path: C:\Users\RoosterMaind\Desktop\Ptterns\McJennyApi\McJennyAPI\McJenny.WebAPI
+DEBUG Logger injected into Dishes Controller
+DEBUG Dishes Controller fetching all Dishes

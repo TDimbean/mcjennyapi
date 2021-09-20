@@ -1,0 +1,23 @@
+DEBUG init main
+INFO Now listening on: https://localhost:5001
+INFO Now listening on: http://localhost:5000
+INFO Application started. Press Ctrl+C to shut down.
+INFO Hosting environment: Development
+INFO Content root path: C:\Users\RoosterMaind\Desktop\Ptterns\McJennyApi\McJennyAPI\McJenny.WebAPI
+DEBUG Logger injected into Employees Controller.
+DEBUG Employee Controller fetching Salary for Employee with ID: 1
+DEBUG Employee Controller returnin Salary for Employee with ID: 1
+DEBUG Logger injected into Dishes Controller
+DEBUG Dishes Controller fetching all Dishes
+DEBUG init main
+INFO Now listening on: https://localhost:5001
+INFO Now listening on: http://localhost:5000
+INFO Application started. Press Ctrl+C to shut down.
+INFO Hosting environment: Development
+INFO Content root path: C:\Users\RoosterMaind\Desktop\Ptterns\McJennyApi\McJennyAPI\McJenny.WebAPI
+DEBUG Logger injected into Dishes Controller
+DEBUG Dishes Controller getting Dish with ID: 4
+DEBUG Dishes Controller returning Dish with ID: 4
+DEBUG Logger injected into Dishes Controller
+DEBUG Dishes Controller fetching basic Dish with ID: 4
+DEBUG Dishes Controller returning basic Dish with ID: 4
